@@ -58,22 +58,14 @@ export default defineAppConfig({
 		/** 侧边栏底部图标导航 */
 		iconNav: [
 			{ icon: 'tabler:home', text: '个人主页', url: blogConfig.author.homepage },
-			{ icon: 'tabler:rss', text: 'Atom订阅', url: '/atom.xml' },
-			{ icon: 'ri:subway-line', text: '开往 - 博客下一站', url: 'https://www.travellings.cn/go.html' },
+			{ icon: 'tabler:brand-github', text: 'nailong666666', url: 'https://github.com/nailong666666' },
 		] satisfies NavItem[],
 		/** 页脚站点地图 */
 		nav: [
 			{
-				title: '探索',
-				items: [
-					{ icon: 'tabler:rss', text: 'Atom订阅', url: '/atom.xml' },
-					{ icon: 'ri:subway-line', text: '开往', url: 'https://www.travellings.cn/go.html' },
-				],
-			},
-			{
 				title: '社交',
 				items: [
-					{ icon: 'tabler:mail', text: blogConfig.author.email, url: `mailto:${blogConfig.author.email}` },
+					{ icon: 'tabler:brand-github', text: 'github', url: 'https://github.com/nailong666666' },
 				],
 			},
 			{

@@ -1,13 +1,13 @@
 import type { FeedEntry } from './app/types/feed'
 
 const basicConfig = {
-	title: '博客',
-	subtitle: '博客',
+	title: '奶龙',
+	subtitle: 'CTF',
 	// 长 description 利好于 SEO
 	description: '博客',
 	author: {
-		name: '博客',
-		avatar: 'https://www.example.site/api/avatar.png',
+		name: '奶龙',
+		avatar: '/avatar.jpg',
 		email: 'hi@example.cyou',
 		homepage: 'https://www.example.site/',
 	},
@@ -16,7 +16,7 @@ const basicConfig = {
 		name: '署名-非商业性使用-相同方式共享 4.0 国际',
 		url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans',
 	},
-	favicon: 'https://www.example.site/api/icon.png',
+	favicon: '/avatar.jpg',
 	language: 'zh-CN',
 	timeEstablished: '2026-06-13',
 	timeZone: 'Asia/Shanghai',
@@ -39,6 +39,10 @@ const blogConfig = {
 			开发: { icon: 'tabler:code', color: '#7777ff' },
 			/** 安全：漏洞/CTF/恶意软件/安全事件分析 */
 			安全: { icon: 'tabler:bug', color: '#ff7733' },
+			/** CTF：夺旗竞赛题解与Writeup */
+			CTF: { icon: 'tabler:flag-3', color: '#ffaa00' },
+			/** CVE：漏洞复现与分析 */
+			CVE: { icon: 'tabler:shield-exclamation', color: '#dd3355' },
 			/** 思考：观点讨论/复盘反思/行业或产品观察 */
 			杂谈: { icon: 'tabler:message', color: '#33bbaa' },
 			/** 记录叙事：个人经历/校园家庭/日常片段 */

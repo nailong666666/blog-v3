@@ -50,7 +50,6 @@ const appConfig = useAppConfig()
 	display: flex;
 	align-items: center;
 	gap: 0.5em;
-	position: relative;
 	margin: clamp(1rem, 2rem, 5vh) 1rem min(1rem, 5vh);
 	line-height: 1.4;
 	color: var(--c-text);
@@ -65,6 +64,10 @@ const appConfig = useAppConfig()
 		border-radius: 50%;
 		box-shadow: var(--box-shadow-1), var(--box-shadow-3);
 	}
+
+	:deep(img) {
+		object-fit: cover;
+	}
 }
 
 @font-face {
@@ -76,7 +79,7 @@ const appConfig = useAppConfig()
 	font-family: AlimamaFangYuanTi, "Noto Sans SC", sans-serif;
 	font-size: 1.5em;
 	font-synthesis: none;
-	font-variation-settings: "wght" 600, "BEVL" 100;
+	font-variation-settings: "wght" 650, "BEVL" 100;
 
 	> .split-char {
 		animation: 3.14s infinite alternate vf-weight, 2.72s infinite alternate vf-bevel;
