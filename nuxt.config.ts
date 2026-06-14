@@ -27,7 +27,8 @@ export default defineNuxtConfig({
 			link: [
 				{ rel: 'icon', href: blogConfig.favicon },
 				{ rel: 'alternate', type: 'application/atom+xml', href: '/atom.xml' },
-				{ rel: 'preconnect', href: blogConfig.twikoo.preload },
+				// Twikoo 评论预连接（启用评论后取消注释）
+			// { rel: 'preconnect', href: blogConfig.twikoo.preload },
 				{ rel: 'stylesheet', href: 'https://lib.baomitu.com/KaTeX/0.16.9/katex.min.css', media: 'print', onload: 'this.media="all"' },
 				// "InterVariable", "Inter", "InterDisplay"
 				{ rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css', media: 'print', onload: 'this.media="all"' },
@@ -136,6 +137,30 @@ export default defineNuxtConfig({
 		},
 		server: {
 			allowedHosts: true,
+		},
+		plugins: [
+			{
+				name: 'resolve-file-urls',
+				enforce: 'pre',
+				resolveId(id) {
+					if (id.startsWith('file://')) {
+						if (process.platform === 'win32')
+							return id.replace(/^file:\/\/\//, '')
+						return id.replace(/^file:\/\//, '')
+					}
+				},
+			},
+		],
+		build: {
+			rollupOptions: {
+				onwarn(warning, warn) {
+					// Nuxt Content MDC 在 Windows 上无法解析 file:// 协议的
+					// remark 插件路径，插件在内容构建管线中正常工作，此警告无害。
+					if (warning.code === 'UNRESOLVED_IMPORT' && warning.message.includes('remark-plugins'))
+						return
+					warn(warning)
+				},
+			},
 		},
 	},
 
