@@ -1,5 +1,4 @@
 import type { FeedGroup } from '../app/types/feed'
-import { myFeed } from '../blog.config'
 
 /**
  * 友链列表
@@ -30,8 +29,6 @@ export default [
 	{
 		name: '朋友们',
 		desc: '友情链接',
-		entries: [
-			myFeed,
-		],
+		entries: [],
 	},
 ] satisfies FeedGroup[]

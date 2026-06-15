@@ -2,7 +2,7 @@ import type { FeedEntry } from './app/types/feed'
 
 const basicConfig = {
 	title: '奶龙',
-	subtitle: 'CTF',
+	subtitle: '会点密码的Web手',
 	// 长 description 利好于 SEO
 	description: '博客',
 	author: {
