@@ -113,12 +113,14 @@ if (category === '自定义') {
 }
 // #endregion
 
-// #region 标签
-const tagsInput = normalize(await text({
-	message: '请输入标签（多个用中英文逗号或空格分隔）',
-	placeholder: 'Vue, Vite, TypeScript',
+// #region 描述
+const description = normalize(await text({
+	message: '请输入文章描述',
+	placeholder: '讲述关于这篇文章的故事...',
+	validate: val => val?.trim() === '' ? '描述不能为空' : undefined,
 }))
-const tags = tagsInput?.split(/[\s,，]+/).map(t => t.trim()).filter(Boolean)
+if (!description)
+	process.exit(0)
 // #endregion
 
 // #region 样式类型
@@ -149,14 +151,13 @@ if (type === 'custom') {
 // #region frontmatter
 const frontmatter = {
 	title,
-	description: `讲述关于${title}的故事，并根据${tags?.join('、')}给出${category}。`,
+	description,
 	date: dateStr,
 	updated: dateStr,
 	image: '# 封面图推荐 2:1，不含与标题重复的文字',
 	permalink,
 	type: type === 'tech' ? undefined : type,
 	categories: category === blogConfig.defaultCategory ? undefined : `[${category}]`,
-	tags: tags ? `[${tags.join(', ')}]` : undefined,
 	// draft: 'true # 撰写完成后，请删除此行',
 }
 // #endregion

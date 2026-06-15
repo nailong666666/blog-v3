@@ -7,7 +7,7 @@ const DEST = 'blog-v3/content/posts/2026'
 
 // 目录名 → 分类映射
 const categoryMap: Record<string, string> = {
-  'CVE': 'CVE',
+  'CVE': '漏洞复现',
   'php反序列化': 'CTF',
   'php 反序列化': 'CTF',
 }
