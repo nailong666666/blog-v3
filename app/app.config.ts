@@ -44,8 +44,8 @@ export default defineAppConfig({
 		},
 
 		stats: {
-			/** 归档页面每年标题对应的年龄（0 为不显示） */
-			birthYear: 0,
+			/** 归档页面每年标题对应的年龄（0 为不显示），生日 9月15日 */
+			birthYear: 2007,
 			/** blog-stats widget 的预置文本 */
 			wordCount: '',
 		},

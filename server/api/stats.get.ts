@@ -19,7 +19,9 @@ export default defineEventHandler(async (event) => {
 
 	const existedPath = new Map()
 
-	const posts = await queryCollection(event, 'content').all()
+	const posts = await queryCollection(event, 'content')
+		.where('stem', 'LIKE', 'posts/%')
+		.all()
 
 	const findOrCreateCategory = (
 		name: string,
