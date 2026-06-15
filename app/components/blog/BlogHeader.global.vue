@@ -9,15 +9,7 @@ const appConfig = useAppConfig()
 
 <template>
 <UtilLink class="blog-header">
-	<div v-if="appConfig.header.emojiTail" class="emoji-tail">
-		<span
-			v-for="(emoji, emojiIndex) in appConfig.header.emojiTail"
-			:key="emojiIndex"
-			class="split-char"
-			:style="getFixedDelay(emojiIndex * .6 - 3)"
-			v-text="emoji"
-		/>
-	</div>
+	<div class="header-bg" />
 
 	<NuxtImg
 		:src="appConfig.header.logo"
@@ -104,46 +96,23 @@ const appConfig = useAppConfig()
 	to { font-variation-settings: "BEVL" 1; }
 }
 
-.emoji-tail {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
-	align-content: center;
-	justify-items: center;
+.header-bg {
 	position: absolute;
+	inset: -0.5rem -0.25rem;
+	background: url('/header-bg.jpg') center / cover no-repeat;
 	opacity: 0.2;
-	inset: 0;
-	font-size: 4rem;
-	transition: opacity 1s;
+	border-radius: 1rem;
 	filter: blur(2px);
+	transition: opacity 1s, filter 0.5s, transform 0.5s;
+	z-index: -3;
 	pointer-events: none;
-	z-index: -2;
-
-	> .split-char {
-		animation: 5s infinite alternate emoji-floating;
-		animation-delay: var(--delay);
-		animation-play-state: paused;
-	}
 }
 
 .blog-header:hover {
-	.emoji-tail {
-		opacity: 0.5;
-	}
-
-	.split-char {
-		animation-play-state: running;
-	}
-}
-
-@keyframes emoji-floating {
-	50% {
-		transform: translate(-12px, -4px) scale(1.2);
-		filter: blur(4px);
-	}
-
-	100% {
-		transform: translate(-4px, -12px) scale(0.9);
-		filter: blur(1px);
+	.header-bg {
+		opacity: 0.4;
+		filter: blur(0);
+		transform: scale(1.05);
 	}
 }
 </style>

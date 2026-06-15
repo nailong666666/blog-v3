@@ -25,7 +25,7 @@ export default defineNuxtConfig({
 				{ name: 'mobile-web-app-capable', content: 'yes' },
 			],
 			link: [
-				{ rel: 'icon', href: blogConfig.favicon },
+				{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
 				{ rel: 'alternate', type: 'application/atom+xml', href: '/atom.xml' },
 				// Twikoo 评论预连接（启用评论后取消注释）
 			// { rel: 'preconnect', href: blogConfig.twikoo.preload },
@@ -88,7 +88,7 @@ export default defineNuxtConfig({
 		...mapValues(redirectList, to => ({ redirect: { to, statusCode: 308 as const } })),
 		'/api/stats': { prerender: true, headers: { 'Content-Type': 'application/json' } },
 		'/atom.xml': { prerender: true, headers: { 'Content-Type': 'application/xml' } },
-		'/favicon.ico': { redirect: { to: blogConfig.favicon } },
+		'/favicon.ico': { redirect: { to: '/favicon.svg' } },
 		'/zhilu.opml': { prerender: true, headers: { 'Content-Type': 'application/xml' } },
 	},
 

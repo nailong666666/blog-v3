@@ -7,7 +7,7 @@ const basicConfig = {
 	description: '博客',
 	author: {
 		name: '奶龙',
-		avatar: '/avatar.jpg',
+		avatar: '/logo.jpg',
 		email: 'hi@example.cyou',
 		homepage: 'https://www.example.site/',
 	},
@@ -16,7 +16,7 @@ const basicConfig = {
 		name: '署名-非商业性使用-相同方式共享 4.0 国际',
 		url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans',
 	},
-	favicon: '/avatar.jpg',
+	favicon: '/logo.jpg',
 	language: 'zh-CN',
 	timeEstablished: '2026-06-13',
 	timeZone: 'Asia/Shanghai',
