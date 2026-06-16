@@ -3,7 +3,7 @@ title: CTFShow Web入门 PHP反序列化 Writeup 合集
 description: 整理自 web254 ~ web278
 date: 2026-06-16 08:59:34
 updated: 2026-06-16 08:59:34
-image: # 封面图推荐 2:1，不含与标题重复的文字
+image: /2026/CTFShow Web入门 PHP反序列化 Writeup 合集/cover.jpg
 categories: [CTF]
 ---
 
