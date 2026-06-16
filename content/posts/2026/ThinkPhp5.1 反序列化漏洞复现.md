@@ -1,13 +1,13 @@
 ---
 title: ThinkPhp5.1 反序列化漏洞复现
-description: 起因是在做CTFshow web入门的反序列化题目时碰到了框架的反序列化，就尝试着复现了一下
+description: 这条链子要比Yii2的长好多
 date: 2026-06-15 15:37:15
 updated: 2026-06-15 15:37:15
-image: /cover.jpg
+image: /2026/ThinkPhp5.1 反序列化漏洞复现/cover.jpg
 categories: [漏洞复现]
 ---
 
-## 1.环境搭建
+## 1. 环境搭建
 
 使用composer创建项目，然后启动，访问即可。
 
@@ -19,7 +19,7 @@ php think run --port=9000
 
 访问 `http://127.0.0.1:9000`。
 
-##  2.添加入口
+##  2. 添加入口
 
 在 `public/index.php` 中添加以下两行，用于接收序列化payload并触发反序列化：
 
@@ -28,7 +28,7 @@ $aa = base64_decode($_POST['aa']);
 unserialize($aa);
 ```
 
-##  3.POP链
+##  3. POP链
 
 起点是 `__destruct` 魔术方法，位于 `thinkphp/library/think/process/pipes/Windows.php`：
 
@@ -333,7 +333,7 @@ public function isAjax($ajax = false)
 
 `__destruct()` → `removeFiles()` → `file_exists()` 触发 `__toString()` → `toJson()` → `toArray()` → `getAttr()` → `getData()` → 调用不可访问方法 `visible()` 触发 `__call()` → `call_user_func_array([$this->hook[$method]], $args)` 调用 `isAjax()` → `param()` → `input()` → `array_walk_recursive()` 回调 `filterValue()` → `call_user_func($filter, $value)` 执行命令。
 
-## 4.POC
+## 4. POC
 
 
 
