@@ -29,6 +29,16 @@ export default [
 	{
 		name: '朋友们',
 		desc: '友情链接',
-		entries: [],
+		entries: [
+			{
+				author: 'sawd6',
+				title: 'sawd6',
+				desc: 'CTF与开发双修',
+				link: 'https://sawd6.xyz',
+				icon: '/sawd6.jpg',
+				avatar: '/sawd6.jpg',
+				date: '2026-06-16',
+			},
+		],
 	},
 ] satisfies FeedGroup[]
