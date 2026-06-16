@@ -4,12 +4,12 @@ const basicConfig = {
 	title: '奶龙',
 	subtitle: '会点密码的Web手',
 	// 长 description 利好于 SEO
-	description: '博客',
+	description: '会点密码的Web手',
 	author: {
 		name: '奶龙',
 		avatar: '/logo.jpg',
-		email: 'hi@example.cyou',
-		homepage: 'https://www.example.site/',
+		email: '965743734@qq.com',
+		homepage: 'https://blog.nldw66.top',
 	},
 	copyright: {
 		abbr: 'CC BY-NC-SA 4.0',
@@ -18,9 +18,9 @@ const basicConfig = {
 	},
 	favicon: '/logo.jpg',
 	language: 'zh-CN',
-	timeEstablished: '2026-06-13',
+	timeEstablished: '2026-06-16',
 	timeZone: 'Asia/Shanghai',
-	url: 'https://blog.example.site/',
+	url: 'https://blog.nldw66.top',
 	defaultCategory: '未分类',
 }
 
@@ -95,7 +95,7 @@ const blogConfig = {
 /** 用于生成 OPML 和友链页面配置 */
 export const myFeed: FeedEntry = {
 	author: blogConfig.author.name,
-	sitenick: '我的博客',
+	sitenick: 'NaiLong',
 	title: blogConfig.title,
 	desc: blogConfig.subtitle || blogConfig.description,
 	link: blogConfig.url,

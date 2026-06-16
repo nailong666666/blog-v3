@@ -6,7 +6,7 @@ defineProps<{
 }>()
 
 const layoutStore = useLayoutStore()
-layoutStore.setAside(['blog-log'])
+layoutStore.setAside([])
 </script>
 
 <template>
