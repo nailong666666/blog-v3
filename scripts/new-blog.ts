@@ -3,7 +3,7 @@
 import { exec } from 'node:child_process'
 import { randomBytes } from 'node:crypto'
 import fs from 'node:fs'
-import { join, resolve } from 'node:path'
+import { basename, extname, join, resolve } from 'node:path'
 import process from 'node:process'
 import { intro, log, outro, select, spinner, text } from '@clack/prompts'
 import { Temporal } from 'temporal-polyfill'
@@ -18,13 +18,31 @@ let fileName: string | undefined = process.argv[2]
 const usePermalink = blogConfig.article.useRandomPremalink
 const now = Temporal.Now.plainDateTimeISO()
 const dateStr = now.toLocaleString('sv')
+// #endregion
 
-const dir = join('content', 'posts', now.year.toString())
+// #region 预览/发布
+const publishStatus = normalize(await select({
+	message: '选择发布状态',
+	options: [
+		{ value: 'preview', label: '🔒 预览模式', hint: '存入 /preview，不显示在首页' },
+		{ value: 'publish', label: '📢 直接发布', hint: '存入 /posts，显示在首页' },
+	],
+	initialValue: 'preview',
+}))
+if (!publishStatus)
+	process.exit(0)
+
+const isPreview = publishStatus === 'preview'
+
+const dirPrefix = isPreview ? 'previews' : 'posts'
+const dir = join('content', dirPrefix, now.year.toString())
 
 if (!fs.existsSync(dir))
 	fs.mkdirSync(dir, { recursive: true })
 
-intro(usePermalink ? '📝 使用中文名 + 随机 URL 新建文章' : '📝 使用指定文件名 + 年份 URL 新建文章')
+intro(isPreview
+	? '🔒 预览模式 — 新建未发布的文章'
+	: '📝 发布模式 — 新建公开发布的文章')
 // #endregion
 
 // #region 传入文件名
@@ -32,7 +50,7 @@ if (fileName)
 	log.info(`文件名: ${join(dir, fileName)}.md`)
 
 const permalink = usePermalink
-	? `/posts/${randomBytes(4).toString('hex').slice(1)}`
+	? `/${dirPrefix}/${randomBytes(4).toString('hex').slice(1)}`
 	: undefined
 
 // #region url为名
@@ -88,6 +106,15 @@ if (fs.existsSync(mdPath)) {
 	log.error('文件已存在')
 	process.exit(1)
 }
+
+// #region 图片目录
+const slug = basename(mdPath, extname(mdPath))
+const imgDir = join('public', now.year.toString(), slug)
+if (!fs.existsSync(imgDir)) {
+	fs.mkdirSync(imgDir, { recursive: true })
+	log.info(`📁 图片目录: ${imgDir}/`)
+}
+// #endregion
 
 // #region 分类
 let category = normalize(await select({
@@ -154,7 +181,7 @@ const frontmatter = {
 	description,
 	date: dateStr,
 	updated: dateStr,
-	image: '# 封面图推荐 2:1，不含与标题重复的文字',
+	image: `/${now.year}/${slug}/cover.jpg`,
 	permalink,
 	type: type === 'tech' ? undefined : type,
 	categories: category === blogConfig.defaultCategory ? undefined : `[${category}]`,
