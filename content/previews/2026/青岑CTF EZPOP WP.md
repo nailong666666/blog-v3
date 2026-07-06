@@ -1,5 +1,5 @@
 ---
-title: 青岑CTF Web入门 WP全集
+title: 青岑CTF EZPOP WP
 description: 整理自青岑CTF靶场
 date: 2026-06-24 14:48:23
 updated: 2026-06-24 14:48:23
