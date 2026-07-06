@@ -50,6 +50,8 @@ import com.test.demo.*;									 //导入demo包中所有的类
 ## Java  注释
 
 ```java
+class Demo {
+
 // 这是一个单行注释
 
 /*
@@ -61,6 +63,9 @@ import com.test.demo.*;									 //导入demo包中所有的类
  * 这是一个文档注释示例
  * 它通常包含有关类、方法或字段的详细信息
  */
+
+    System.out.println("Hello");
+}
 ```
 
 ## Java  基础语法
