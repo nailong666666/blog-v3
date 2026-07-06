@@ -9,7 +9,7 @@ categories: [技术]
 
 ## Java  简介 
 
-**Java** 是一种**面向对象**、**跨平台**、**强类型**的高级编程语言。通常是通过**javac**将**.java**源码编译成**.class**字节码，再交由**JVM**运行。
+**Java** 是一种面向对象、跨平台、强类型的高级编程语言。通常是通过`javac`将`.java`源码编译成`.class`字节码，再交由`JVM`运行。
 
 ## Java  包和导包
 
@@ -29,7 +29,7 @@ com
 ```
 那么Main.java就应该是
 
-```Java
+```java
 package com.test.demo;
 public class Main{
     public static void main(String[] args){
@@ -42,7 +42,7 @@ public class Main{
 
  **import**是用来导入已经写好的类，可以导入具体的类或者某个包下所有的类。
 
-```Java
+```java
 import com.test.demo.Main;								 //导入Main类
 import com.test.demo.*;									 //导入demo包中所有的类
 ```
@@ -69,7 +69,7 @@ import com.test.demo.*;									 //导入demo包中所有的类
 
 | 类型        | 默认值     | 示例               |
 | ----------- | ---------- | ------------------ |
-| **byte**    | 0          | `byte a =44`       |
+| **byte**    | 0          | `byte a = 44`      |
 | **short**   | 0          | `short a = 33`     |
 | **int**     | 0          | `int a = 11`       |
 | **long**    | 0L         | `long a = 22L`     |
