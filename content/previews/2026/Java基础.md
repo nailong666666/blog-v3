@@ -11,6 +11,8 @@ categories: [技术]
 
 **Java** 是一种面向对象、跨平台、强类型的高级编程语言。通常是通过`javac`将`.java`源码编译成`.class`字节码，再交由`JVM`运行。
 
+
+
 ## Java  包和导包
 
 ###  1.  源文件命名
@@ -47,6 +49,8 @@ import com.test.demo.Main;								 //导入Main类
 import com.test.demo.*;									 //导入demo包中所有的类
 ```
 
+
+
 ## Java  注释
 
 ```java
@@ -68,6 +72,8 @@ class Demo {
 }
 ```
 
+
+
 ## Java  基础语法
 
 ### 1.  基本数据类型
@@ -85,9 +91,9 @@ class Demo {
 
 ### 2.  引用类型
 
-在java中，引用类型的变量类似于C++中的指针，引用类型变量存放的不是对象本身，而是对象在内存中的地址。引用类型默认值是**null**。类和数组等都是引用类型。
+在java中，引用类型的变量类似于C++中的指针，引用变量保存的是 **对象的引用** 。引用类型默认值是**null**。类和数组等都是引用类型。
 
-``` java
+```java
 int[] arr = {1, 2, 3};                                         
 
 String str = "Hello";
@@ -128,7 +134,7 @@ dataType[] arrayRefVar = {value0, value1, ..., valuek};
 JDK 1.5 引进了一种新的循环类型，被称为 For-Each 循环或者加强型循环，它能在不使用下标的情况下遍历数组。语法是：
 
 ```java
-for(type element: array)
+for (type element : array)
 {
     System.out.println(element);
 }
@@ -166,10 +172,10 @@ for(初始化; 布尔表达式; 更新) {
 实例：
 
 ```java
-public class test{
+public class Test {
     public static void main(String[] args){
         for(int i = 0; i < 10; i++){
-            System.out.println( x );
+            System.out.println( i );
         }
     }
 }
@@ -188,7 +194,7 @@ while( 布尔表达式 ) {
 实例：
 
 ```java
-public class test {
+public class Test {
    public static void main(String[] args) {
       int x = 10;
       while( x < 20 ) {
@@ -212,7 +218,7 @@ do {
 实例：
 
 ```java
-public class test {
+public class Test {
    public static void main(String[] args){
       int x = 10;
  	  do{
@@ -229,23 +235,7 @@ break 主要用在循环语句或者 switch 语句中，用来跳出整个语句
 
 continue 适用于任何循环控制结构中。作用是让程序立刻跳转到下一次循环的迭代。在 for 循环中，continue 语句使程序立即跳转到更新语句。在 while 或者 do…while 循环中，程序立即跳转到布尔表达式的判断语句。
 
-### 5.  正则表达式
-
-#### 1.  java.util.regex 包
-
-#### 2.  
-
-#### 3.  语法
-
-#### 4.  
-
-#### 5.  
-
-#### 6.  
-
-
-
-### 6.  输出
+### 5.  输出
 
 #### 1.  `System.out.print()` 
 
@@ -295,6 +285,334 @@ System.out.println("姓名：" + name + " 年龄：" + age);
 //输出
 姓名：Tom 年龄：18
 ```
+
+## Java  正则表达式
+
+### 1.  java.util.regex 包
+
+`java.util.regex` 是 Java 标准库中专门用于正则表达式处理的包，主要负责字符串的匹配、查找、替换、分割等操作，该包一共有三个类。
+
+#### 1.  Pattern 类：
+
+Pattern 对象是一个正则表达式的编译表示。
+
+实例：
+
+```java
+import java.util.regex.Pattern;
+
+Pattern pattern = Pattern.compile("\\d+");                   //pattern类没有构造函数，可以使用静态方法compile()来编译正则表达式。
+
+Matcher m = pattern.matcher("123abc");                       //创建 Matcher 对象
+
+boolean result = Pattern.matches("\\d+", "12345");           //直接判断整个字符串是否匹配
+```
+
+
+
+#### 2.  Matcher 类：
+
+Matcher 对象是对输入字符串进行解释和匹配操作的引擎。
+
+实例：
+
+```java
+import java.util.regex.Matcher;
+
+// 要求整个字符串都符合正则。matches()
+Pattern p = Pattern.compile("\\d+");
+Matcher m = p.matcher("123");
+System.out.println(m.matches());
+
+// 查找下一段符合规则的内容。find()
+Pattern p = Pattern.compile("\\d+");
+Matcher m = p.matcher("abc123xyz456");
+while(m.find()){
+    System.out.println(m.group());
+}
+
+// 返回最近一次匹配到的内容。group()
+Matcher m = p.matcher("abc123");
+m.find();
+System.out.println(m.group());
+```
+
+
+
+#### 3.  PatternSyntaxException 类：
+
+PatternSyntaxException表示一个正则表达式模式中的语法错误。
+
+### 2.  捕获组
+
+捕获组是Java 正则表达式中非常重要的概念，用于**将匹配到的某一部分内容保存起来，以便后续获取或引用**。
+
+实例：
+
+```java
+import java.util.regex.*;
+
+public class Test {
+    public static void main(String[] args) {
+
+        Pattern p = Pattern.compile("(\\d+)");
+        Matcher m = p.matcher("abc123xyz");
+
+        if (m.find()) {
+            System.out.println(m.group());
+            System.out.println(m.group(1));
+        }
+    }
+}
+
+// 输出
+123
+123
+// group()等价于group(0),表示整个正则表达式匹配到的内容。
+    
+// groupCount()  查看有多少个捕获组。
+
+Pattern p = Pattern.compile("(\\d+)-([a-z]+)");
+Matcher m = p.matcher("123-abc");
+
+System.out.println(m.groupCount());
+
+// 输出
+2
+// groupCount() 不包括 group(0)。
+
+```
+
+### 3.  语法
+
+在Java 中，`\\ `表示：插入一个正则表达式的反斜线，使其后的字符具有特殊的意义。在其他语言中，只需要一个` \` 就能表示转义的作用，而在Java 中，要有两个 `\\ `。
+
+#### 1.  普通字符
+
+普通字符表示**按字面意思匹配**。例如正则`a`匹配字符 a 。
+
+#### 2.  元字符
+
+元字符具有特殊含义。
+
+##### 1.  点号`.`
+
+匹配**任意一个字符**（默认不包括换行符）。例如正则`a.e`可以匹配ase afe a2e等。
+
+##### 2.  转义符 `\`
+
+用于取消元字符的特殊含义。例如正则`\.` `\\`分别匹配 . \ 。
+
+##### 3.   常见转义字符
+
+| 正则 | 含义                           |
+| :--- | :----------------------------- |
+| `\d` | 数字 `[0-9]`                   |
+| `\D` | 非数字                         |
+| `\w` | 单词字符（字母、数字、下划线） |
+| `\W` | 非单词字符                     |
+| `\s` | 空白字符（空格、Tab、换行等）  |
+| `\S` | 非空白字符                     |
+| `\t` | Tab                            |
+| `\n` | 换行                           |
+| `\r` | 回车                           |
+
+#### 3.  字符类
+
+##### 1.  基本字符类
+
+正则`[abc]`匹配a 或 b 或 c 。
+
+##### 2.  范围
+
+| 正则          | 含义           |
+| :------------ | :------------- |
+| `[a-z]`       | 所有小写字母   |
+| `[A-Z]`       | 所有大写字母   |
+| `[0-9]`       | 数字           |
+| `[a-z0-9A-Z]` | 所有字母和数字 |
+
+##### 3.  取反
+
+`[^abc]` 表示不是 a 、b 、c的。
+
+#### 4.  量词
+
+控制匹配次数。
+
+| 正则    | 含义       |
+| :------ | :--------- |
+| `*`     | 0 次或多次 |
+| `+`     | 1 次或多次 |
+| `?`     | 0 次或1 次 |
+| `{n}`   | 恰好 n 次  |
+| `{n,}`  | 至少 n 次  |
+| `{n,m}` | n~m 次     |
+
+#### 5.  边界匹配
+
+| 正则 | 含义           |
+| ---- | -------------- |
+| `^`  | 匹配开头       |
+| `$`  | 匹配结尾       |
+| `\b` | 匹配单词边界   |
+| `\B` | 匹配非单词边界 |
+
+### 
+
+## Java  类与对象
+
+Java 中类与对象和 C++ 较为相似，直接通过一个实例去学习。
+
+```java
+public class Student{
+    public String name;
+    public int age;
+
+    public Student(String name, int age){
+        this.name = name;
+        this.age = age;
+    }
+
+    public void Setname(String name){
+        this.name = name;
+    }
+
+    public void Setage(int age){
+        this.age = age;
+    }
+
+    public static void main(String[] args){
+        Student s1 = new Student(" ",0);
+        System.out.println(s1.name+" "+s1.age);
+
+        s1.Setname("nailong");
+        s1.Setage(10);
+        System.out.println(s1.name+" "+s1.age);
+    }
+}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Java  继承和多态
+
+## Java  关键字
+
+### 1.  new
+
+`new` 用于**创建对象**，在堆内存中分配空间，并调用对象的构造方法完成初始化。
+
+### 2.  this
+
+`this` 表示**当前对象本身**。哪个对象调用方法，`this` 就代表哪个对象。
+
+### 3.  static
+
+`static` 表示**属于类，而不是属于对象**。`static`修饰成员变量表示该成员变量是该类的；静态方法要访问普通成员，必须要先创建对象。
+
+### 4.  final 
+
+`final` 表示不可改变。修饰变量不可再次赋值，修饰方法不能重写，修饰类不能继承。
+
+### 5.  extends
+
+`extends` 表示子类继承父类。子类自动拥有父类的属性和方法。Java 中只能继承一个类。
+
+### 6.  super 
+
+`super` 表示父类。
+
+### 7.  abstract
+
+`abstract`表示抽象，用于修饰抽象类和抽象方法。当有抽象方法时，抽象方法不能实现，该类就是抽象类。子类必须实现抽象方法，或者继续保持抽象，抽象类不能创建对象。
+
+### 8.  interface 
+
+`interface` 表示接口，是一种规范。
+
+```java
+interface Fly{
+
+    void fly();
+
+}
+```
+
+### 9.  implements
+
+`implements` 表示实现接口。一个类可以实现多个接口。
+
+```java
+interface Fly{
+
+    void fly();
+
+}
+
+class Bird implements Fly{
+
+    public void fly(){
+
+        System.out.println("飞");
+
+    }
+
+}
+```
+
+### 10.  instanceof
+
+`instanceof` 表示判断对象是否属于某个类或接口。
+
+```java
+Animal a = new Dog();
+
+System.out.println(a instanceof Dog);
+
+// 输出
+true
+```
+
+
+
+## Java  异常处理
+
+### 1.  类结构
+
+Java 中有关异常处理的类都位于 **java.lang** 包中。根类是**Throwable**，它由两个子类，**Error**和**Exception**。前者是错误，表示 **JVM 或系统级错误**。后者是异常，又分为两大类：**RuntimeException** （非受检异常，编译器不会强制处理）和 **非 RuntimeException** （受检异常，编译器要求必须处理）。
+
+### 2.  关键字和类
+
+Java 提供了一些关键字和类去处理异常。
+
+- **try**：用于包裹可能会抛出异常的代码块。
+- **catch**：用于捕获异常并处理异常的代码块。
+- **finally**：用于包含无论是否发生异常都需要执行的代码块。
+- **throw**：用于手动抛出异常。
+- **throws**：用于在方法声明中指定方法可能抛出的异常。
+- **Exception**类：是所有异常类的父类，它提供了一些方法来获取异常信息，如 **getMessage()、printStackTrace()** 等。
+
+
+
+
+
+
+
+
+
+
 
 
 
