@@ -498,16 +498,6 @@ public class Student{
 
 
 
-
-
-
-
-
-
-
-
-## Java  继承和多态
-
 ## Java  关键字
 
 ### 1.  new
@@ -584,6 +574,84 @@ System.out.println(a instanceof Dog);
 // 输出
 true
 ```
+
+
+
+## Java  继承和多态
+
+Java 中继承和多态与 C++ 有类似的，这里用一个实例学习。
+
+```java
+public class Student {
+    public String name;
+    public String sex;
+
+    public Student(String s1,String s2){
+        this.name = s1;
+        this.sex = s2;
+    }
+
+    public void Getsex(){
+        System.out.println("性别："+sex);
+    }
+
+    public static void main(String[] args){
+        System.out.println("父类");
+    }
+}
+
+class man extends Student{
+    public man(String s1){
+        super(s1,"man");
+    }
+
+    public void Getsex(){
+        System.out.println("性别：man");
+    }
+
+    public static void main(String[] args) {
+        System.out.println("子类");
+        man man1 = new man("小明");
+        man1.Getsex();
+    }
+}
+
+class woman extends Student{
+    public woman(String s1){
+        super(s1,"woman");
+    }
+
+    public void Getsex(){
+        System.out.println("性别：woman");
+    }
+
+    public static void main(String[] args) {
+        System.out.println("子类");
+        woman woman1 = new woman("小红");
+        woman1.Getsex();
+    }
+}
+
+class Test {
+    public static void main(String[] args) {
+
+        Student s1 = new man("小明");
+        Student s2 = new woman("小红");
+
+        s1.Getsex();
+        s2.Getsex();
+
+    }
+
+}
+
+```
+
+与 C++ 不同的是，Java只支持继承一个类，要想继承多个，可以通过类继承接口的方式。
+
+
+
+
 
 
 
