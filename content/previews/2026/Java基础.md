@@ -677,10 +677,195 @@ Java 提供了一些关键字和类去处理异常。
 
 
 
+## Java  集合框架
+
+Java 集合框架是 Java 提供的一套用于存储和管理对象的统一容器体系，位于 `java.util` 包中。分为**Collection（单列集合）**和**Map（双列集合）**。
+
+这里对泛型进行一个介绍，它允许在定义类、接口、方法时使用类型参数，从而实现代码复用、类型安全、减少强制类型转换。这里用一个泛型类学习。
+
+```java
+class Box<T>{
+    private T value;
+
+    public void set(T value){
+        this.value = value;
+    }
+
+    public T get(){
+        return value;
+    }
+}
+```
+
+
+
+### 1.  Collection
+
+Collection 是所有单列集合的根接口，由它继承出了许多接口，这里学习一下**List**和**Set**两个。
+
+List 集合是有序的、可以重复的、有索引的接口，以**ArrayList**具体实现为例。Set集合是无重复元素、无索引的接口，以**HashSet**具体实现为例。
+
+```java
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class Test {
+    public static void main(String[] args) {
+
+        // List接口
+        List<String> list = new ArrayList<String>();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        for(String s: list){
+            System.out.println(s);
+        }
+        System.out.println("list");
+
+        // Set接口
+        Set<String> set = new HashSet<String>();
+        set.add("a");
+        set.add("a");
+        set.add("b");
+        set.add("b");
+        set.add("c");
+        set.add("c");
+        for(String s: set){
+            System.out.println(s);
+        }
+        System.out.println("Set");
+    }
+
+}
+
+
+```
+
+
+
+### 2.  Map
+
+map 是双列的，按照键值对的形式存储。这里以**HashMap**为例。
+
+```java
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Set;
+
+public class Test {
+    public static void main(String[] args) {
+
+        // 这里要用int的包装类
+        Map<String,Integer> student = new HashMap<String,Integer>();
+        student.put("小张",12);
+        student.put("小王",19);
+        student.put("小明",15);
+
+        // Map的遍历要先获得键Set，然后遍历键
+        Set<String> name = student.keySet();
+        for (String key : name) {
+            Integer value = student.get(key);
+            System.out.println(key+":"+value);
+        }
+    }
+}
+
+
+```
+
+Java 为每个基本类型都提供了对应的**包装类**。
+
+| 基本类型 | 包装类    |
+| -------- | --------- |
+| int      | Integer   |
+| double   | Double    |
+| char     | Character |
+| boolean  | Boolean   |
+| long     | Long      |
+| float    | Float     |
+| short    | Short     |
+| byte     | Byte      |
+
+
+
+## Java  IO流
+
+- **Input（输入）**：把数据读到程序里
+- **Output（输出）**：把程序里的数据写出去
+
+**IO流** 可以分为字节流和字符流两类，字节流一切数据都可以操作，字符流专门处理文本。以文件流举例。
+
+```java
+// FileReader
+FileReader fr = new FileReader("a.txt");
+
+int ch;
+
+while((ch = fr.read()) != -1){
+    System.out.print((char)ch);
+}
+
+fr.close();
+
+// FileWriter
+FileWriter fw = new FileWriter("a.txt");
+
+fw.write("Hello Java");
+
+fw.close();
+
+```
+
+
+
+## Java  注解
 
 
 
 
 
 
+
+
+
+## Java  反射
+
+
+
+
+
+
+
+## Java  序列化与反序列化
+
+
+
+
+
+
+
+
+
+## Java  类加载机制
+
+
+
+
+
+## Java 动态代理
+
+
+
+
+
+## Servlet 基础
+
+
+
+
+
+## Maven 基础
 
