@@ -695,9 +695,10 @@ class Box<T>{
         return value;
     }
 }
+
 ```
 
-
+Java 泛型要求类型参数必须是引用类型，在后面使用基本类型的包装类。
 
 ### 1.  Collection
 
@@ -767,6 +768,7 @@ public class Test {
         // Map的遍历要先获得键Set，然后遍历键
         Set<String> name = student.keySet();
         for (String key : name) {
+            // 这里因为Map值可以使null，如果用int会因为空指针报错，需要用包装类
             Integer value = student.get(key);
             System.out.println(key+":"+value);
         }
@@ -818,14 +820,6 @@ fw.write("Hello Java");
 fw.close();
 
 ```
-
-
-
-## Java  注解
-
-
-
-
 
 
 
