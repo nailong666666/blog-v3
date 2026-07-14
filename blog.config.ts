@@ -81,15 +81,15 @@ const blogConfig = {
 		// { 'src': 'https://your-umami.example.com/script.js', 'data-website-id': 'your-id', 'defer': true },
 		// Cloudflare Insights 统计（需要时取消注释并填入你的 token）
 		// { 'src': 'https://static.cloudflareinsights.com/beacon.min.js', 'data-cf-beacon': '{"token": "your-token"}', 'defer': true },
-		// Twikoo 评论系统（需要时取消注释并填入你的服务地址）
-		// { src: 'https://lib.baomitu.com/twikoo/1.6.44/twikoo.min.js', defer: true },
+		// Twikoo 评论系统
+		{ src: 'https://lib.baomitu.com/twikoo/1.6.44/twikoo.min.js', defer: true },
 	],
 
-	/** 自己部署的 Twikoo 服务（需要时取消注释并填入你的地址） */
-	// twikoo: {
-	// 	envId: 'https://your-twikoo.example.com/',
-	// 	preload: 'https://your-twikoo.example.com/',
-	// },
+	/** Twikoo 评论服务 */
+	twikoo: {
+		envId: 'https://nailong666.netlify.app/.netlify/functions/twikoo',
+		preload: 'https://nailong666.netlify.app/',
+	},
 }
 
 /** 用于生成 OPML 和友链页面配置 */

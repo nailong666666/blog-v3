@@ -27,8 +27,8 @@ export default defineNuxtConfig({
 			link: [
 				{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
 				{ rel: 'alternate', type: 'application/atom+xml', href: '/atom.xml' },
-				// Twikoo 评论预连接（启用评论后取消注释）
-			// { rel: 'preconnect', href: blogConfig.twikoo.preload },
+				// Twikoo 评论预连接
+			{ rel: 'preconnect', href: blogConfig.twikoo?.preload },
 				{ rel: 'stylesheet', href: 'https://lib.baomitu.com/KaTeX/0.16.9/katex.min.css', media: 'print', onload: 'this.media="all"' },
 				// "InterVariable", "Inter", "InterDisplay"
 				{ rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css', media: 'print', onload: 'this.media="all"' },
