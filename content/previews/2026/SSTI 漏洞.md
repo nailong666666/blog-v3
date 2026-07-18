@@ -11,9 +11,9 @@ categories: [技术]
 
 SSTI（Server-Side Template Injection）是一种服务器端模板注入漏洞，发生在应用程序使用模板引擎渲染用户输入时未能正确过滤或转义用户提供的内容。比如在`python的flask`、`php的tp`、`java的spring`等框架中都可能存在。
 
-## Flask SSTI lab
+## Jinj2 
 
-这里先用基于 Flask 框架的SSTI lab进行学习， 直接用https://www.nssctf.cn/problem/13。
+这里先用 Jinj2 模版进行学习。
 
 ### 1.  `no waf`
 
@@ -154,4 +154,10 @@ url : ...?a1=os&a2=env
     
  
 ```
+
+## Node.js
+
+## PHP
+
+## Spring
 
