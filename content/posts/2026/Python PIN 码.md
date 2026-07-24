@@ -49,7 +49,7 @@ PIN 由 6 个参数计算出来。
 3. `appname`  app名，通过`getattr(app, "__name__", type(app).__name__)` 读取，默认是 `Flask` 。
 4. `moddir`  文件路径，通过`getattr(mod, "__file__", None)` 读取，一般可以通过查看 debug 报错信息获得，Python3是 app.py，Python2 中是 app.pyc 。
 5. `uuid`  电脑 mac 地址的十进制数，通过`uuid.getnode()`读取，通过文件`/sys/class/net/eth0/address`得到16进制结果，去掉 : 转化为10进制数。
-6. `machine_id`  首先读取 `/etc/machine-id`，如果有值就停止 ，否则读取`/proc/sys/kernel/random/boot_id`，接着读取 `/proc/self/cgroup`，取第一行的最后一个斜杠 `/` 后面的字符串，与上面的拼接起来。
+6. `machine_id`  首先读取 `/etc/machine-id`，如果有值就停止 ，否则读取`/proc/sys/kernel/random/boot_id`，接着读取 `/proc/self/cgroup`，取第一行的最后一个斜杠 `/` 后面的字符串，与上面的拼接起来。`self` 过滤可以用相关进程的 `pid` 去替换，其实`1`就行。`cgroup`过滤可以考虑`mountinfo`或者`cpuset` 。
 
 源码在`werkzeug/debug/__init__.py`，我们去看下相应的代码。前四个参数通过`get_pin_and_cookie_name` 获得。
 
